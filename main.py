@@ -1,15 +1,27 @@
 import asyncio
-import logging
 import sys
-from aiogram import Bot, Dispatcher
+# import logging
 
-API_TOKEN = "6804342824:AAGt0TD8ArdX0yq0MByat0rH7wVNI8OX0FA"
-bot = Bot(token=API_TOKEN)
-dp = Dispatcher()
+from loguru import logger
+
+from runners.launch import (
+    bot,
+    dp_main as dp,
+)  # Импортируем экземпляры бота и диспетчера
+
+
+loop = asyncio.get_event_loop()  # Ссылка на текущий цикл событий
+logger.info("dp_main --> dp")
+
+
+async def main() -> None:  # Запуск бота
+    logger.add(sys.stderr, level="INFO")
+    await bot.delete_webhook(drop_pending_updates=True)
+    logger.info("Start Polling")
+    await dp.start_polling(bot, skip_updates=True)
 
 
 if __name__ == "__main__":
-    from runners.bot_runner import start_polling
-
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    asyncio.run(start_polling(bot, dp))
+    # logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    logger.info("Start bot")
+    loop.run_until_complete(main())

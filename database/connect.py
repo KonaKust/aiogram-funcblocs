@@ -5,7 +5,7 @@ from config.config_reader import config
 
 
 async def connect():  # Возвращает пул соединений с MySQL
-    logger.info("Database connected")
+    logger.info("Database connected!")
     return await aiomysql.create_pool(
         host=config.db_host.get_secret_value(),
         user=config.db_user.get_secret_value(),
@@ -17,5 +17,6 @@ async def connect():  # Возвращает пул соединений с MySQ
     )
 
 
+logger.info("Connecting to database...")
 # Остановка выполнения до соединения с БД
 db_connect = loop.run_until_complete(connect())

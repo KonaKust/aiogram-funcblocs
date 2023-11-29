@@ -11,7 +11,7 @@ from runners.launch import (
 
 
 loop = asyncio.get_event_loop()  # Ссылка на текущий цикл событий
-logger.info("dp_main --> dp")
+logger.info("main.py was imported")
 
 
 async def main() -> None:  # Запуск бота

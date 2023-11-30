@@ -1,4 +1,3 @@
-import logging
 from aiogram import Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message
@@ -10,9 +9,9 @@ router = Router()
 
 @router.message(CommandStart())  # Ловим команду '/start'
 async def command_start_handler(message: Message) -> None:
-    logging.info("Start command handled!")
     db = user_db.Users()  # создаём алиас на метод класса?
     user = message.from_user
+    logger.info("Start command handled!")
     if await db.search_user(user.id):
         await message.answer("С возвращением!")
         logger.info("That is returned user")

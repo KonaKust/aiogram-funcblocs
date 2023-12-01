@@ -13,9 +13,9 @@ async def command_start_handler(message: Message) -> None:
     user = message.from_user
     logger.info("Start command handled!")
     if await db.search_user(user.id):
-        await message.answer("С возвращением!")
+        await message.answer("С возвращением\!")
         logger.info("That is returned user")
     else:
         await db.add_user(user)  # Добовлем пользователя в БД, если его там нет
-        await message.answer("Привет! Добро пожаловать!")
+        await message.answer("Привет\! Добро пожаловать\!")
         logger.info("That is new user")

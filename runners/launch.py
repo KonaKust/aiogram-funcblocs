@@ -1,4 +1,5 @@
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, Router
+from aiogram.types import Message
 from aiogram.enums import ParseMode
 from loguru import logger
 
@@ -8,6 +9,7 @@ from config.config_reader import config
 logger.info("Creating Bot and Dispatcher")
 bot = Bot(token=config.bot_token.get_secret_value(), parse_mode=ParseMode.MARKDOWN_V2)
 dp_main = Dispatcher()
+router = Router()
 
 
 def startModules():  # Запуск модулей
@@ -24,4 +26,11 @@ def startModules():  # Запуск модулей
         logger.error(f"Error when import: {e}")
 
 
+@router.message()
+async def zero_handler(message: Message) -> None:  # ловим остальные сообщения
+    logger.warning(f'Handled something weird: "{message.text}"')
+    await message.answer("Прости, но я тебя не понимаю :\(")
+
+
 startModules()
+dp_main.include_router(router)

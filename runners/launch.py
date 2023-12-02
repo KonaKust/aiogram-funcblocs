@@ -20,8 +20,8 @@ def startModules():  # Запуск модулей
         adminka.enable()
 
         logger.info("Module loading completed!")
-    except Exception:
-        logger.exception
+    except Exception as e:
+        logger.error(f"Error when import: {e}")
 
 
 startModules()

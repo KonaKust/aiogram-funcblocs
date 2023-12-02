@@ -14,12 +14,13 @@ class Admin:
                 columns = [
                     desc[0] for desc in cur.description
                 ]  # получаем описание столбцов
-        users_list = [
-            dict(zip(columns, user)) for user in users
-        ]  # создает пары ключ-значение для каждого кортежа
-        return users_list  # в конечном итоге получаем словарь для каждого пользователя
+                users_list = [
+                    dict(zip(columns, user)) for user in users
+                ]  # создает пары ключ-значение для каждого кортежа
 
-    async def count_users(self):
+                return users_list  # в конечном итоге получаем словарь для каждого пользователя
+
+    async def count_users(self):  # считаем пользователей
         async with self.pool.acquire() as conn:
             async with conn.cursor() as cur:
                 # Запрос для количества всех пользователей
@@ -28,12 +29,12 @@ class Admin:
                 total_users_count = await cur.fetchone()
 
                 # Запрос для количества администраторов
-                sql_admin_users = "SELECT COUNT(`admin`) as `admin_users` FROM users WHERE `admin` != 0;"
+                sql_admin_users = "SELECT COUNT(`admin`) as `admin_users` FROM users WHERE `admin` = 1;"
                 await cur.execute(sql_admin_users)
                 admin_users_count = await cur.fetchone()
 
                 # Запрос для количества пользователей подписавшихся на расписание
-                sql_subscribed_users = "SELECT COUNT(`subscribe_time`) as `subscribed_users` FROM users WHERE `subscribe_time` != 0;"
+                sql_subscribed_users = "SELECT COUNT(`subscribe_time`) as `subscribed_users` FROM users WHERE `subscribe_time` = 1;"
                 await cur.execute(sql_subscribed_users)
                 subscribed_users_count = await cur.fetchone()
 

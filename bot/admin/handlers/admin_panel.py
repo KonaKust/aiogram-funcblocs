@@ -4,7 +4,6 @@ from aiogram.types import Message
 from loguru import logger
 import database.admin as admin_db  # Импортируем класс (ещё не изучено)
 
-
 global db
 router = Router()
 db = admin_db.Admin()
@@ -28,12 +27,10 @@ async def cmd_count_users(message: Message):
     logger.info("Count_users command handled")
     counts = await db.count_users()
     response_text = f"""
-        *Информация о колличестве пользователей*
-        Всего: 
-        {counts ['total_users']}
-        Susbscribe Time:
-        {counts ['admin_users']}
-        Админов \- {counts ['subscribed_users']}
+    *Информация о колличестве пользователей*
+        Всего: {counts ['total_users']}
+        Susbscribe Time: {counts ['subscribed_users']}
+        Админов: {counts ['admin_users']}
     """
     await message.answer(response_text)
     logger.info("Counts of users sended")

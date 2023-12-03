@@ -1,5 +1,4 @@
 from aiogram import Bot, Dispatcher, Router
-from aiogram.types import Message
 from aiogram.enums import ParseMode
 from loguru import logger
 
@@ -18,18 +17,12 @@ def startModules():  # Запуск модулей
         from bot.admin import loader as adminka
         from bot.core import loader as core
 
-        core.enable()
         adminka.enable()
+        core.enable()  # Ядро должно запускаться последним
 
-        logger.info("Module loading completed!")
+        logger.info("Modules loading completed!")
     except Exception as e:
         logger.error(f"Error when import: {e}")
-
-
-@router.message()
-async def zero_handler(message: Message) -> None:  # ловим остальные сообщения
-    logger.warning(f'Handled something weird: "{message.text}"')
-    await message.answer("Прости, но я тебя не понимаю :\(")
 
 
 startModules()

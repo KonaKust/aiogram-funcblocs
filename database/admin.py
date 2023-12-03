@@ -5,6 +5,15 @@ from database.connect import db_connect
 class Admin:
     pool: Pool = db_connect
 
+    async def list_of_admins(self):
+        async with self.pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                sql = "SELECT `user_id` FROM `users` WHERE `admin` = 1;"
+                await cur.execute(sql)
+                # Используем списковое включение и распаковку значений
+                result = [user_id for (user_id,) in await cur.fetchall()]
+                return tuple(result)  # преобразуем список в кортеж
+
     async def list_of_all_users(self):  # Выводим список всех пользоавтелей
         async with self.pool.acquire() as conn:
             async with conn.cursor() as cur:

@@ -1,36 +1,23 @@
-from aiogram import Router
-from aiogram.filters import Command
-from aiogram.types import Message
+from aiogram import Router, F
+from aiogram.types import CallbackQuery, Message, reply_keyboard_markup
 from loguru import logger
-import database.admin as admin_db  # Импортируем класс (ещё не изучено)
+from bot.admin.filters.is_admin import IsAdmin
+from bot.admin.keyboards import admin_panel
 
-global db
 router = Router()
-db = admin_db.Admin()
 
 
-@router.message(Command("users_list"))  # Список пользователей
-async def cmd_user_list(message: Message):
-    logger.info("Users_list command handled!")
-    users = await db.list_of_all_users()
-    response_text = "Список пользователей:\n"
-    for user in users:
-        response_text += (
-            f"\#{user ['id']} \- {user['username']} \(ID: {user['user_id']}\)\n"
-        )
-    await message.answer(response_text)
-    logger.info("Users list sended")
+@router.message(F.text.lower() == "/", IsAdmin())
+@router.message(F.text.lower() == "/admin", IsAdmin())  # Открыть админку
+async def admin_menu_handler(message: Message) -> None:
+    await message.delete()
+    await message.answer("*Панель администратора:*", reply_markup=admin_panel.main_kb)
 
 
-@router.message(Command("count_users"))
-async def cmd_count_users(message: Message):
-    logger.info("Count_users command handled")
-    counts = await db.count_users()
-    response_text = f"""
-    *Информация о колличестве пользователей*
-        Всего: {counts ['total_users']}
-        Susbscribe Time: {counts ['subscribed_users']}
-        Админов: {counts ['admin_users']}
-    """
-    await message.answer(response_text)
-    logger.info("Counts of users sended")
+@router.callback_query(F.data == "admin_menu", IsAdmin())
+async def back_to_admin_menu_handler(callback: CallbackQuery) -> None:
+    await callback.message.answer(
+        "*Панель администратора:*", reply_markup=admin_panel.main_kb
+    )
+    await callback.answer()
+    await callback.message.edit_reply_markup()

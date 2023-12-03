@@ -1,21 +1,16 @@
 import asyncio
-import sys
+# import sys
 # import logging
 
 from loguru import logger
-
-from runners.launch import (
-    bot,
-    dp_main as dp,
-)  # Импортируем экземпляры бота и диспетчера
-
+from config import loguru
+from runners.launch import bot, dp_main as dp
 
 loop = asyncio.get_event_loop()  # Ссылка на текущий цикл событий
 logger.info("main.py was imported")
 
 
 async def main() -> None:  # Запуск бота
-    logger.add(sys.stderr, level="INFO")
     await bot.delete_webhook(drop_pending_updates=True)
     logger.info("Start Polling")
     await dp.start_polling(bot, skip_updates=True)

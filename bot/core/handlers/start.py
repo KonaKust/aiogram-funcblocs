@@ -1,7 +1,8 @@
 from aiogram import Router, F
 from aiogram.filters import CommandStart
-from aiogram.types import CallbackQuery, Message, message
+from aiogram.types import CallbackQuery, Message
 from loguru import logger
+# from aiogram import flags
 
 import database.user as user_db  # Импортируем класс (ещё не изучено)
 from bot.core.keyboards import start
@@ -13,6 +14,7 @@ router = Router()
 
 
 @router.message(CommandStart())  # Ловим команду '/start'
+# @flags.rate_limit(rate=10, key="start") # Пример применения троттлинг мидлвари
 async def command_start_handler(message: Message) -> None:
     user = message.from_user
     logger.info("Start command handled!")

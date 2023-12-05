@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     # Желательно вместо str использовать SecretStr
     # для конфиденциальных данных, например, токена бота
     bot_token: SecretStr
+    ngrok_uri: SecretStr
     db_host: SecretStr
     db_user: SecretStr
     db_pass: SecretStr

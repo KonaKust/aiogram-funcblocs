@@ -1,13 +1,20 @@
 import asyncio
+# from aiohttp import web
+
 # import sys
 # import logging
 
 from loguru import logger
 from config import loguru
 from runners.launch import bot, dp_main as dp
+# from runners.launch import app, set_webhook
 
 loop = asyncio.get_event_loop()  # Ссылка на текущий цикл событий
 logger.info("main.py was imported")
+
+
+# async def on_startup(_):
+#     await set_webhook()
 
 
 async def on_shutdown(_):
@@ -23,4 +30,12 @@ async def main() -> None:  # Запуск бота
 if __name__ == "__main__":
     # logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     logger.info("Start bot")
+    # app.on_startup.append(on_startup)
     loop.run_until_complete(main())
+    #
+    # web.run_app(
+    #     app,
+    #     loop=loop,
+    #     host="0.0.0.0",
+    #     port=80,
+    # )

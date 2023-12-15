@@ -17,7 +17,7 @@ class Admin:
     async def list_of_all_users(self):  # Выводим список всех пользоавтелей
         async with self.pool.acquire() as conn:
             async with conn.cursor() as cur:
-                sql = "SELECT `id`, `username`, `user_id` FROM `users`;"
+                sql = "SELECT `id`, `user_id`, `username`, `first_name`, `last_name` FROM `users`;"
                 await cur.execute(sql)
                 users = await cur.fetchall()
                 columns = [
@@ -42,14 +42,8 @@ class Admin:
                 await cur.execute(sql_admin_users)
                 admin_users_count = await cur.fetchone()
 
-                # Запрос для количества пользователей подписавшихся на расписание
-                sql_subscribed_users = "SELECT COUNT(`subscribe_time`) as `subscribed_users` FROM users WHERE `subscribe_time` = 1;"
-                await cur.execute(sql_subscribed_users)
-                subscribed_users_count = await cur.fetchone()
-
                 # Возвращаем результат в виде словаря
                 return {
                     "total_users": total_users_count[0],
                     "admin_users": admin_users_count[0],
-                    "subscribed_users": subscribed_users_count[0],
                 }
